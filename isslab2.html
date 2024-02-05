@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <h1 id="title"><center><title>Digital clock</title></center></h1>
+    <style>body {
+        display: flex;
+        justify-content: center;
+        height:100vh;
+        margin: 0;
+        overflow: hidden;
+        align-items: center;
+        
+    }
+    #bgVideo {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        min-width: 100%;
+        min-height: 100%;
+        z-index: -1;
+    }
+    #title {
+    color: rgba(250, 91, 91, 0.8);
+}
+   #content{
+    text-align:center;
+    color: rgba(192, 62, 19, 0.8);
+    font-size: 69px;
+   }
+        #toggle {
+    border: none;
+    background: none;
+    padding: 0;
+}
+#clock {
+    font-size: 150px; 
+    font-family: Cochin;
+    color: rgba(20, 211, 128, 0.85); 
+    
+}
+#toggle img {
+    
+    display: none;
+
+}
+        </style>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    
+    <video id="bgVideo" autoplay muted loop >
+        <source src="clockbg.mp4" type="video/mp4">
+    </video>
+    <div id="content"
+    <h1 id="title"><center>Digital clock</center></h1>
+    <div id="clock"></div>
+</div>
+    <button id="toggle">
+        <img src="blackhole.png" alt="Toggle format">
+    </button>
+
+    <script>
+        var is24HourFormat = false;
+        window.addEventListener('mousedown', mouseDown);
+window.addEventListener('mouseup', mouseUp);
+        function clock(){
+            let date=new Date();
+            let hrs=date.getHours();
+            let mins=date.getMinutes();
+            let sec=date.getSeconds();
+            let period="AM";
+            
+
+            if(hrs<10){
+                hrs="0"+hrs;
+            }
+            if(mins<10){
+                mins="0"+mins;
+            }
+            if(sec<10){
+                sec="0"+sec;
+            }
+            if(hrs==0){
+                hrs=12;
+                if(!is24HourFormat)
+                period="AM";
+            }
+            if(!is24HourFormat){
+            if(hrs>12){
+                hrs=hrs-12;
+                hrs="0"+hrs;
+                period="PM";
+            }}
+            if(hrs>12)
+            {   
+                period="PM";
+            }
+            if(!is24HourFormat){
+            var time=hrs+":"+mins+":"+sec+"  "+period;
+            }
+            else{
+                var time=hrs+":"+mins+":"+sec;
+            }
+            document.getElementById("clock").innerHTML=time;
+            setTimeout(clock,100);
+        }
+        clock();
+        var isMouseDown = false;
+        var mouseDownTime;
+
+        function mouseDown() {
+            isMouseDown = true;
+            mouseDownTime = new Date().getTime();
+            slowDownVideo();
+        }
+
+        function mouseUp() {
+            isMouseDown = false;
+            resetVideoSpeed();
+            var mouseUpTime = new Date().getTime();
+            if (mouseUpTime - mouseDownTime < 200) { 
+                toggleFormat();
+            }
+        }
+
+        function slowDownVideo() {
+            document.getElementById("bgVideo").playbackRate = 0.3; 
+        }
+
+        function resetVideoSpeed() {
+            document.getElementById("bgVideo").playbackRate = 1.0; 
+        }
+
+        function toggleFormat() {
+            is24HourFormat = !is24HourFormat;
+        }
+    </script>
+</body>
+</html>
+
+<!-- the whole screen is the button to toggle the format-->
+<!-- hold the click button to slow down black hole! release to make it the same speed as before-->
